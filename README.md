@@ -1,32 +1,30 @@
-# rss-parser
+# rss-to-json-parser
 
 [![Version][npm-image]][npm-link]
 [![Build Status][build-image]][build-link]
 [![Downloads][downloads-image]][npm-link]
 
-[downloads-image]: https://img.shields.io/npm/dm/rss-parser.svg
-[npm-image]: https://img.shields.io/npm/v/rss-parser.svg
-[npm-link]: https://npmjs.org/package/rss-parser
-[build-image]: https://travis-ci.org/bobby-brennan/rss-parser.svg?branch=master
-[build-link]: https://travis-ci.org/bobby-brennan/rss-parser
+[downloads-image]: https://img.shields.io/npm/dm/rss-to-json-parser.svg
+[npm-image]: https://img.shields.io/npm/v/rss-to-json-parser.svg
+[npm-link]: https://npmjs.org/package/rss-to-json-parser
+[build-image]: https://travis-ci.org/johannessanders/rss-to-json-parser.svg?branch=master
+[build-link]: https://travis-ci.org/johannessanders/rss-to-json-parser
 
 A small library for turning RSS XML feeds into JavaScript objects.
 
 ## Installation
 ```bash
-npm install --save rss-parser
+npm install --save rss-to-json-parser
 ```
 
 ## Usage
-You can parse RSS from a URL (`parser.parseURL`) or an XML string (`parser.parseString`).
-
-Both callbacks and Promises are supported.
+You can parse RSS from an XML string (`parser.parseString`).
 
 ### NodeJS
 Here's an example in NodeJS using Promises with async/await:
 
 ```js
-let Parser = require('rss-parser');
+let Parser = require('rss-to-json-parser');
 let parser = new Parser();
 
 (async () => {
@@ -49,7 +47,7 @@ let parser = new Parser();
 Here's an example in the browser using callbacks:
 
 ```html
-<script src="/node_modules/rss-parser/dist/rss-parser.min.js"></script>
+<script src="/node_modules/rss-to-json-parser/dist/rss-to-json-parser.min.js"></script>
 <script>
 
 // Note: some RSS feeds can't be loaded in the browser due to CORS security.
@@ -165,7 +163,7 @@ let parser = new Parser({
 
 
 ### xml2js passthrough
-`rss-parser` uses [xml2js](https://github.com/Leonidas-from-XIV/node-xml2js)
+`rss-to-json-parser` uses [xml2js](https://github.com/Leonidas-from-XIV/node-xml2js)
 to parse XML. You can pass [these options](https://github.com/Leonidas-from-XIV/node-xml2js#options)
 to `new xml2js.Parser()` by specifying `options.xml2js`:
 
@@ -206,7 +204,7 @@ let parser = new Parser({maxRedirects: 100});
 
 
 ## Contributing
-Contributions are welcome! If you are adding a feature or fixing a bug, please be sure to add a [test case](https://github.com/bobby-brennan/rss-parser/tree/master/test/input)
+Contributions are welcome! If you are adding a feature or fixing a bug, please be sure to add a [test case](https://github.com/johannessanders/rss-to-json-parser/tree/master/test/input)
 
 ### Running Tests
 The tests run the RSS parser for several sample RSS feeds in `test/input` and outputs the resulting JSON into `test/output`. If there are any changes to the output files the tests will fail.

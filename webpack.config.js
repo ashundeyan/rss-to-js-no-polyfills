@@ -1,7 +1,7 @@
 var webpack = require("webpack");
 module.exports = {
   entry: {
-    "rss-parser": "./index.js"
+    "rss-to-json-parser": "./index.js"
   },
   output: {
     path: __dirname,

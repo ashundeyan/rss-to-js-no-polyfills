@@ -1,13 +1,13 @@
 {
-  "name": "rss-parser",
+  "name": "rss-to-json-parser",
   "description": "",
   "version": "1.1.0",
-  "main": "dist/rss-parser.js",
+  "main": "dist/rss-to-json-parser.js",
   "authors": [
     "Bobby Brennan"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/bobby-brennan/rss-parser",
+  "homepage": "https://github.com/johannessanders/rss-to-json-parser",
   "moduleType": [
     "node"
   ],

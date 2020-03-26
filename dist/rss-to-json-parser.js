@@ -159,7 +159,7 @@ var fields = __webpack_require__(/*! ./fields */ "./lib/fields.js");
 var utils = __webpack_require__(/*! ./utils */ "./lib/utils.js");
 
 var DEFAULT_HEADERS = {
-  'User-Agent': 'rss-parser',
+  'User-Agent': 'rss-to-json-parser',
   'Accept': 'application/rss+xml'
 };
 var DEFAULT_MAX_REDIRECTS = 5;
@@ -226,63 +226,9 @@ var Parser = function () {
       return prom;
     }
   }, {
-    key: 'parseURL',
-    value: function parseURL(feedUrl, callback) {
-      var _this2 = this;
-
-      var redirectCount = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-
-      var xml = '';
-      var get = feedUrl.indexOf('https') === 0 ? https.get : http.get;
-      var urlParts = url.parse(feedUrl);
-      var headers = Object.assign({}, DEFAULT_HEADERS, this.options.headers);
-      var timeout = null;
-      var prom = new Promise(function (resolve, reject) {
-        var req = get({
-          headers: headers,
-          auth: urlParts.auth,
-          protocol: urlParts.protocol,
-          hostname: urlParts.hostname,
-          port: urlParts.port,
-          path: urlParts.path
-        }, function (res) {
-          if (_this2.options.maxRedirects && res.statusCode >= 300 && res.statusCode < 400 && res.headers['location']) {
-            if (redirectCount === _this2.options.maxRedirects) {
-              return reject(new Error("Too many redirects"));
-            } else {
-              var newLocation = url.resolve(feedUrl, res.headers['location']);
-              return _this2.parseURL(newLocation, null, redirectCount + 1).then(resolve, reject);
-            }
-          } else if (res.statusCode >= 300) {
-            return reject(new Error("Status code " + res.statusCode));
-          }
-          var encoding = utils.getEncodingFromContentType(res.headers['content-type']);
-          res.setEncoding(encoding);
-          res.on('data', function (chunk) {
-            xml += chunk;
-          });
-          res.on('end', function () {
-            return _this2.parseString(xml).then(resolve, reject);
-          });
-        });
-        req.on('error', reject);
-        timeout = setTimeout(function () {
-          return reject(new Error("Request timed out after " + _this2.options.timeout + "ms"));
-        }, _this2.options.timeout);
-      }).then(function (data) {
-        clearTimeout(timeout);
-        return Promise.resolve(data);
-      }, function (e) {
-        clearTimeout(timeout);
-        return Promise.reject(e);
-      });
-      prom = utils.maybePromisify(callback, prom);
-      return prom;
-    }
-  }, {
     key: 'buildAtomFeed',
     value: function buildAtomFeed(xmlObj) {
-      var _this3 = this;
+      var _this2 = this;
 
       var feed = { items: [] };
       utils.copyFromXML(xmlObj.feed, feed, this.options.customFields.feed);
@@ -300,7 +246,7 @@ var Parser = function () {
       }
       (xmlObj.feed.entry || []).forEach(function (entry) {
         var item = {};
-        utils.copyFromXML(entry, item, _this3.options.customFields.item);
+        utils.copyFromXML(entry, item, _this2.options.customFields.item);
         if (entry.title) {
           var _title = entry.title[0] || '';
           if (_title._) _title = _title._;
@@ -319,7 +265,7 @@ var Parser = function () {
         if (entry.id) {
           item.id = entry.id[0];
         }
-        _this3.setISODate(item);
+        _this2.setISODate(item);
         feed.items.push(item);
       });
       return feed;
@@ -353,7 +299,7 @@ var Parser = function () {
   }, {
     key: 'buildRSS',
     value: function buildRSS(channel, items) {
-      var _this4 = this;
+      var _this3 = this;
 
       items = items || [];
       var feed = { items: [] };
@@ -387,7 +333,7 @@ var Parser = function () {
           if (item.guid._) item.guid = item.guid._;
         }
         if (xmlItem.category) item.categories = xmlItem.category;
-        _this4.setISODate(item);
+        _this3.setISODate(item);
         feed.items.push(item);
       });
       return feed;
@@ -728,7 +674,7 @@ function fromByteArray(uint8) {
 /* WEBPACK VAR INJECTION */(function(global) {/*!
  * The buffer module from node.js, for the browser.
  *
- * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @author   Feross Aboukhadijeh <http://feross.org>
  * @license  MIT
  */
 /* eslint-disable no-proto */
@@ -2676,15 +2622,15 @@ var encode = __webpack_require__(/*! ./lib/encode.js */ "./node_modules/entities
     decode = __webpack_require__(/*! ./lib/decode.js */ "./node_modules/entities/lib/decode.js");
 
 exports.decode = function (data, level) {
-	return (!level || level <= 0 ? decode.XML : decode.HTML)(data);
+    return (!level || level <= 0 ? decode.XML : decode.HTML)(data);
 };
 
 exports.decodeStrict = function (data, level) {
-	return (!level || level <= 0 ? decode.XML : decode.HTMLStrict)(data);
+    return (!level || level <= 0 ? decode.XML : decode.HTMLStrict)(data);
 };
 
 exports.encode = function (data, level) {
-	return (!level || level <= 0 ? encode.XML : encode.HTML)(data);
+    return (!level || level <= 0 ? encode.XML : encode.HTML)(data);
 };
 
 exports.encodeXML = encode.XML;
@@ -2720,66 +2666,66 @@ var decodeXMLStrict = getStrictDecoder(xmlMap),
     decodeHTMLStrict = getStrictDecoder(entityMap);
 
 function getStrictDecoder(map) {
-	var keys = Object.keys(map).join("|"),
-	    replace = getReplacer(map);
+    var keys = Object.keys(map).join("|"),
+        replace = getReplacer(map);
 
-	keys += "|#[xX][\\da-fA-F]+|#\\d+";
+    keys += "|#[xX][\\da-fA-F]+|#\\d+";
 
-	var re = new RegExp("&(?:" + keys + ");", "g");
+    var re = new RegExp("&(?:" + keys + ");", "g");
 
-	return function (str) {
-		return String(str).replace(re, replace);
-	};
+    return function (str) {
+        return String(str).replace(re, replace);
+    };
 }
 
 var decodeHTML = function () {
-	var legacy = Object.keys(legacyMap).sort(sorter);
+    var legacy = Object.keys(legacyMap).sort(sorter);
 
-	var keys = Object.keys(entityMap).sort(sorter);
+    var keys = Object.keys(entityMap).sort(sorter);
 
-	for (var i = 0, j = 0; i < keys.length; i++) {
-		if (legacy[j] === keys[i]) {
-			keys[i] += ";?";
-			j++;
-		} else {
-			keys[i] += ";";
-		}
-	}
+    for (var i = 0, j = 0; i < keys.length; i++) {
+        if (legacy[j] === keys[i]) {
+            keys[i] += ";?";
+            j++;
+        } else {
+            keys[i] += ";";
+        }
+    }
 
-	var re = new RegExp("&(?:" + keys.join("|") + "|#[xX][\\da-fA-F]+;?|#\\d+;?)", "g"),
-	    replace = getReplacer(entityMap);
+    var re = new RegExp("&(?:" + keys.join("|") + "|#[xX][\\da-fA-F]+;?|#\\d+;?)", "g"),
+        replace = getReplacer(entityMap);
 
-	function replacer(str) {
-		if (str.substr(-1) !== ";") str += ";";
-		return replace(str);
-	}
+    function replacer(str) {
+        if (str.substr(-1) !== ";") str += ";";
+        return replace(str);
+    }
 
-	//TODO consider creating a merged map
-	return function (str) {
-		return String(str).replace(re, replacer);
-	};
+    //TODO consider creating a merged map
+    return function (str) {
+        return String(str).replace(re, replacer);
+    };
 }();
 
 function sorter(a, b) {
-	return a < b ? 1 : -1;
+    return a < b ? 1 : -1;
 }
 
 function getReplacer(map) {
-	return function replace(str) {
-		if (str.charAt(1) === "#") {
-			if (str.charAt(2) === "X" || str.charAt(2) === "x") {
-				return decodeCodePoint(parseInt(str.substr(3), 16));
-			}
-			return decodeCodePoint(parseInt(str.substr(2), 10));
-		}
-		return map[str.slice(1, -1)];
-	};
+    return function replace(str) {
+        if (str.charAt(1) === "#") {
+            if (str.charAt(2) === "X" || str.charAt(2) === "x") {
+                return decodeCodePoint(parseInt(str.substr(3), 16));
+            }
+            return decodeCodePoint(parseInt(str.substr(2), 10));
+        }
+        return map[str.slice(1, -1)];
+    };
 }
 
 module.exports = {
-	XML: decodeXMLStrict,
-	HTML: decodeHTML,
-	HTMLStrict: decodeHTMLStrict
+    XML: decodeXMLStrict,
+    HTML: decodeHTML,
+    HTMLStrict: decodeHTMLStrict
 };
 
 /***/ }),
@@ -2800,25 +2746,24 @@ module.exports = decodeCodePoint;
 
 // modified version of https://github.com/mathiasbynens/he/blob/master/src/he.js#L94-L119
 function decodeCodePoint(codePoint) {
+    if (codePoint >= 0xd800 && codePoint <= 0xdfff || codePoint > 0x10ffff) {
+        return "\uFFFD";
+    }
 
-	if (codePoint >= 0xD800 && codePoint <= 0xDFFF || codePoint > 0x10FFFF) {
-		return "\uFFFD";
-	}
+    if (codePoint in decodeMap) {
+        codePoint = decodeMap[codePoint];
+    }
 
-	if (codePoint in decodeMap) {
-		codePoint = decodeMap[codePoint];
-	}
+    var output = "";
 
-	var output = "";
+    if (codePoint > 0xffff) {
+        codePoint -= 0x10000;
+        output += String.fromCharCode(codePoint >>> 10 & 0x3ff | 0xd800);
+        codePoint = 0xdc00 | codePoint & 0x3ff;
+    }
 
-	if (codePoint > 0xFFFF) {
-		codePoint -= 0x10000;
-		output += String.fromCharCode(codePoint >>> 10 & 0x3FF | 0xD800);
-		codePoint = 0xDC00 | codePoint & 0x3FF;
-	}
-
-	output += String.fromCharCode(codePoint);
-	return output;
+    output += String.fromCharCode(codePoint);
+    return output;
 }
 
 /***/ }),
@@ -2844,59 +2789,59 @@ var inverseHTML = getInverseObj(__webpack_require__(/*! ../maps/entities.json */
 exports.HTML = getInverse(inverseHTML, htmlReplacer);
 
 function getInverseObj(obj) {
-	return Object.keys(obj).sort().reduce(function (inverse, name) {
-		inverse[obj[name]] = "&" + name + ";";
-		return inverse;
-	}, {});
+    return Object.keys(obj).sort().reduce(function (inverse, name) {
+        inverse[obj[name]] = "&" + name + ";";
+        return inverse;
+    }, {});
 }
 
 function getInverseReplacer(inverse) {
-	var single = [],
-	    multiple = [];
+    var single = [],
+        multiple = [];
 
-	Object.keys(inverse).forEach(function (k) {
-		if (k.length === 1) {
-			single.push("\\" + k);
-		} else {
-			multiple.push(k);
-		}
-	});
+    Object.keys(inverse).forEach(function (k) {
+        if (k.length === 1) {
+            single.push("\\" + k);
+        } else {
+            multiple.push(k);
+        }
+    });
 
-	//TODO add ranges
-	multiple.unshift("[" + single.join("") + "]");
+    //TODO add ranges
+    multiple.unshift("[" + single.join("") + "]");
 
-	return new RegExp(multiple.join("|"), "g");
+    return new RegExp(multiple.join("|"), "g");
 }
 
 var re_nonASCII = /[^\0-\x7F]/g,
     re_astralSymbols = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
 
 function singleCharReplacer(c) {
-	return "&#x" + c.charCodeAt(0).toString(16).toUpperCase() + ";";
+    return "&#x" + c.charCodeAt(0).toString(16).toUpperCase() + ";";
 }
 
 function astralReplacer(c) {
-	// http://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
-	var high = c.charCodeAt(0);
-	var low = c.charCodeAt(1);
-	var codePoint = (high - 0xD800) * 0x400 + low - 0xDC00 + 0x10000;
-	return "&#x" + codePoint.toString(16).toUpperCase() + ";";
+    // http://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
+    var high = c.charCodeAt(0);
+    var low = c.charCodeAt(1);
+    var codePoint = (high - 0xd800) * 0x400 + low - 0xdc00 + 0x10000;
+    return "&#x" + codePoint.toString(16).toUpperCase() + ";";
 }
 
 function getInverse(inverse, re) {
-	function func(name) {
-		return inverse[name];
-	}
+    function func(name) {
+        return inverse[name];
+    }
 
-	return function (data) {
-		return data.replace(re, func).replace(re_astralSymbols, astralReplacer).replace(re_nonASCII, singleCharReplacer);
-	};
+    return function (data) {
+        return data.replace(re, func).replace(re_astralSymbols, astralReplacer).replace(re_nonASCII, singleCharReplacer);
+    };
 }
 
 var re_xmlChars = getInverseReplacer(inverseXML);
 
 function escapeXML(data) {
-	return data.replace(re_xmlChars, singleCharReplacer).replace(re_astralSymbols, astralReplacer).replace(re_nonASCII, singleCharReplacer);
+    return data.replace(re_xmlChars, singleCharReplacer).replace(re_astralSymbols, astralReplacer).replace(re_nonASCII, singleCharReplacer);
 }
 
 exports.escape = escapeXML;
@@ -3022,6 +2967,12 @@ EventEmitter.prototype._maxListeners = undefined;
 // added to it. This is a useful default which helps finding memory leaks.
 var defaultMaxListeners = 10;
 
+function checkListener(listener) {
+  if (typeof listener !== 'function') {
+    throw new TypeError('The "listener" argument must be of type Function. Received type ' + (typeof listener === 'undefined' ? 'undefined' : _typeof(listener)));
+  }
+}
+
 Object.defineProperty(EventEmitter, 'defaultMaxListeners', {
   enumerable: true,
   get: function get() {
@@ -3055,13 +3006,13 @@ EventEmitter.prototype.setMaxListeners = function setMaxListeners(n) {
   return this;
 };
 
-function $getMaxListeners(that) {
+function _getMaxListeners(that) {
   if (that._maxListeners === undefined) return EventEmitter.defaultMaxListeners;
   return that._maxListeners;
 }
 
 EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
-  return $getMaxListeners(this);
+  return _getMaxListeners(this);
 };
 
 EventEmitter.prototype.emit = function emit(type) {
@@ -3110,9 +3061,7 @@ function _addListener(target, type, listener, prepend) {
   var events;
   var existing;
 
-  if (typeof listener !== 'function') {
-    throw new TypeError('The "listener" argument must be of type Function. Received type ' + (typeof listener === 'undefined' ? 'undefined' : _typeof(listener)));
-  }
+  checkListener(listener);
 
   events = target._events;
   if (events === undefined) {
@@ -3147,7 +3096,7 @@ function _addListener(target, type, listener, prepend) {
     }
 
     // Check for listener leak
-    m = $getMaxListeners(target);
+    m = _getMaxListeners(target);
     if (m > 0 && existing.length > m && !existing.warned) {
       existing.warned = true;
       // No error code for this since it is a Warning
@@ -3175,13 +3124,11 @@ EventEmitter.prototype.prependListener = function prependListener(type, listener
 };
 
 function onceWrapper() {
-  var args = [];
-  for (var i = 0; i < arguments.length; i++) {
-    args.push(arguments[i]);
-  }if (!this.fired) {
+  if (!this.fired) {
     this.target.removeListener(this.type, this.wrapFn);
     this.fired = true;
-    ReflectApply(this.listener, this.target, args);
+    if (arguments.length === 0) return this.listener.call(this.target);
+    return this.listener.apply(this.target, arguments);
   }
 }
 
@@ -3194,17 +3141,13 @@ function _onceWrap(target, type, listener) {
 }
 
 EventEmitter.prototype.once = function once(type, listener) {
-  if (typeof listener !== 'function') {
-    throw new TypeError('The "listener" argument must be of type Function. Received type ' + (typeof listener === 'undefined' ? 'undefined' : _typeof(listener)));
-  }
+  checkListener(listener);
   this.on(type, _onceWrap(this, type, listener));
   return this;
 };
 
 EventEmitter.prototype.prependOnceListener = function prependOnceListener(type, listener) {
-  if (typeof listener !== 'function') {
-    throw new TypeError('The "listener" argument must be of type Function. Received type ' + (typeof listener === 'undefined' ? 'undefined' : _typeof(listener)));
-  }
+  checkListener(listener);
   this.prependListener(type, _onceWrap(this, type, listener));
   return this;
 };
@@ -3213,9 +3156,7 @@ EventEmitter.prototype.prependOnceListener = function prependOnceListener(type, 
 EventEmitter.prototype.removeListener = function removeListener(type, listener) {
   var list, events, position, i, originalListener;
 
-  if (typeof listener !== 'function') {
-    throw new TypeError('The "listener" argument must be of type Function. Received type ' + (typeof listener === 'undefined' ? 'undefined' : _typeof(listener)));
-  }
+  checkListener(listener);
 
   events = this._events;
   if (events === undefined) return this;
@@ -4121,7 +4062,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
-if (!process.version || process.version.indexOf('v0.') === 0 || process.version.indexOf('v1.') === 0 && process.version.indexOf('v1.8.') !== 0) {
+if (typeof process === 'undefined' || !process.version || process.version.indexOf('v0.') === 0 || process.version.indexOf('v1.') === 0 && process.version.indexOf('v1.8.') !== 0) {
   module.exports = { nextTick: nextTick };
 } else {
   module.exports = process;
@@ -4639,7 +4580,7 @@ var objectKeys = Object.keys || function (obj) {
 module.exports = Duplex;
 
 /*<replacement>*/
-var util = __webpack_require__(/*! core-util-is */ "./node_modules/core-util-is/lib/util.js");
+var util = Object.create(__webpack_require__(/*! core-util-is */ "./node_modules/core-util-is/lib/util.js"));
 util.inherits = __webpack_require__(/*! inherits */ "./node_modules/inherits/inherits_browser.js");
 /*</replacement>*/
 
@@ -4768,7 +4709,7 @@ module.exports = PassThrough;
 var Transform = __webpack_require__(/*! ./_stream_transform */ "./node_modules/readable-stream/lib/_stream_transform.js");
 
 /*<replacement>*/
-var util = __webpack_require__(/*! core-util-is */ "./node_modules/core-util-is/lib/util.js");
+var util = Object.create(__webpack_require__(/*! core-util-is */ "./node_modules/core-util-is/lib/util.js"));
 util.inherits = __webpack_require__(/*! inherits */ "./node_modules/inherits/inherits_browser.js");
 /*</replacement>*/
 
@@ -4860,7 +4801,7 @@ function _isUint8Array(obj) {
 /*</replacement>*/
 
 /*<replacement>*/
-var util = __webpack_require__(/*! core-util-is */ "./node_modules/core-util-is/lib/util.js");
+var util = Object.create(__webpack_require__(/*! core-util-is */ "./node_modules/core-util-is/lib/util.js"));
 util.inherits = __webpack_require__(/*! inherits */ "./node_modules/inherits/inherits_browser.js");
 /*</replacement>*/
 
@@ -5895,7 +5836,7 @@ module.exports = Transform;
 var Duplex = __webpack_require__(/*! ./_stream_duplex */ "./node_modules/readable-stream/lib/_stream_duplex.js");
 
 /*<replacement>*/
-var util = __webpack_require__(/*! core-util-is */ "./node_modules/core-util-is/lib/util.js");
+var util = Object.create(__webpack_require__(/*! core-util-is */ "./node_modules/core-util-is/lib/util.js"));
 util.inherits = __webpack_require__(/*! inherits */ "./node_modules/inherits/inherits_browser.js");
 /*</replacement>*/
 
@@ -6116,7 +6057,7 @@ var Duplex;
 Writable.WritableState = WritableState;
 
 /*<replacement>*/
-var util = __webpack_require__(/*! core-util-is */ "./node_modules/core-util-is/lib/util.js");
+var util = Object.create(__webpack_require__(/*! core-util-is */ "./node_modules/core-util-is/lib/util.js"));
 util.inherits = __webpack_require__(/*! inherits */ "./node_modules/inherits/inherits_browser.js");
 /*</replacement>*/
 
@@ -11297,6 +11238,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     extend(Parser, superClass);
 
     function Parser(opts) {
+      this.parseStringPromise = bind(this.parseStringPromise, this);
       this.parseString = bind(this.parseString, this);
       this.reset = bind(this.reset, this);
       this.assignOrPush = bind(this.assignOrPush, this);
@@ -11593,8 +11535,22 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
     };
 
+    Parser.prototype.parseStringPromise = function (str) {
+      return new Promise(function (_this) {
+        return function (resolve, reject) {
+          return _this.parseString(str, function (err, value) {
+            if (err) {
+              return reject(err);
+            } else {
+              return resolve(value);
+            }
+          });
+        };
+      }(this));
+    };
+
     return Parser;
-  }(events.EventEmitter);
+  }(events);
 
   exports.parseString = function (str, a, b) {
     var cb, options, parser;
@@ -11613,6 +11569,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
     parser = new exports.Parser(options);
     return parser.parseString(str, cb);
+  };
+
+  exports.parseStringPromise = function (str, a) {
+    var options, parser;
+    if ((typeof a === 'undefined' ? 'undefined' : _typeof(a)) === 'object') {
+      options = a;
+    }
+    parser = new exports.Parser(options);
+    return parser.parseStringPromise(str);
   };
 }).call(undefined);
 
@@ -11719,6 +11684,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   exports.Parser = parser.Parser;
 
   exports.parseString = parser.parseString;
+
+  exports.parseStringPromise = parser.parseStringPromise;
 }).call(undefined);
 
 /***/ }),
@@ -11790,4 +11757,4 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_xmlbuilder__;
 
 /******/ });
 });
-//# sourceMappingURL=rss-parser.js.map
+//# sourceMappingURL=rss-to-json-parser.js.map
