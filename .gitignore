@@ -1,0 +1,23 @@
+# JS
+/build
+
+# NPM / Yarn
+/node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Jest
+/.jest
+/test-reports
+
+# project
+.env*
+!.env.example
+
+# editors
+.vscode
+
+# misc
+.DS_Store
+*/.DS_Store
