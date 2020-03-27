@@ -1,4 +1,9 @@
-# rss-to-json-parser
+<h1 align="center">
+  <img src="logo.svg" width="100" alt="icon" draggable="false"><br>
+  RSS to JSON parser
+  <br>
+  <br>
+</h1>
 
 [![Version][npm-image]][npm-link]
 [![Build Status][build-image]][build-link]
