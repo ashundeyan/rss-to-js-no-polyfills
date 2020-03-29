@@ -3,7 +3,7 @@
     "name": "Johannes Sanders"
   },
   "bugs": {
-    "url": "https://github.com/johannessanders/rss-to-json-parser/issues"
+    "url": "https://github.com/johannessanders/rss-to-js/issues"
   },
   "bundleDependencies": false,
   "dependencies": {
@@ -25,10 +25,9 @@
   "directories": {
     "test": "test"
   },
-  "homepage": "https://github.com/johannessanders/rss-to-json-parser#readme",
+  "homepage": "https://github.com/johannessanders/rss-to-js#readme",
   "keywords": [
     "RSS",
-    "RSS to JSON",
     "RSS reader",
     "RSS parser",
     "RSS to JS",
@@ -36,14 +35,14 @@
   ],
   "license": "MIT",
   "main": "index.js",
-  "name": "rss-to-json-parser",
+  "name": "rss-to-js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/johannessanders/rss-to-json-parser.git"
+    "url": "git+https://github.com/johannessanders/rss-to-js.git"
   },
   "scripts": {
     "build": "./scripts/build.sh",
-    "test": "mocha --exit"
+    "test": "mocha --exit --timeout 10000"
   },
   "types": "index.d.ts",
   "version": "3.7.6"

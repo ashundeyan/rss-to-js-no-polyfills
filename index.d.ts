@@ -5,20 +5,11 @@ declare namespace Parser {
     readonly Accept?: string;
     readonly 'User-Agent'?: string;
   }
-
-  type CustomFieldItem = string | { keepArray: boolean }
-    
-  export interface CustomFields {
-    readonly feed?: string[];
-    readonly item?: CustomFieldItem[] | CustomFieldItem[][];
-  }
-
   export interface ParserOptions {
     readonly xml2js?: Options;
     readonly headers?: Headers;
     readonly defaultRSS?: number;
     readonly maxRedirects?: number;
-    readonly customFields?: CustomFields;
     readonly timeout?: number;
   }
 

@@ -9,17 +9,17 @@
 [![Build Status][build-image]][build-link]
 [![Downloads][downloads-image]][npm-link]
 
-[downloads-image]: https://img.shields.io/npm/dm/rss-to-json-parser.svg
-[npm-image]: https://img.shields.io/npm/v/rss-to-json-parser.svg
-[npm-link]: https://npmjs.org/package/rss-to-json-parser
-[build-image]: https://travis-ci.org/johannessanders/rss-to-json-parser.svg?branch=master
-[build-link]: https://travis-ci.org/johannessanders/rss-to-json-parser
+[downloads-image]: https://img.shields.io/npm/dm/rss-to-js.svg
+[npm-image]: https://img.shields.io/npm/v/rss-to-js.svg
+[npm-link]: https://npmjs.org/package/rss-to-js
+[build-image]: https://travis-ci.org/johannessanders/rss-to-js.svg?branch=master
+[build-link]: https://travis-ci.org/johannessanders/rss-to-js
 
 A small library for turning RSS XML feeds into JavaScript objects.
 
 ## Installation
 ```bash
-npm install --save rss-to-json-parser
+npm install --save rss-to-js
 ```
 
 ## Usage
@@ -29,57 +29,34 @@ You can parse RSS from an XML string (`parser.parseString`).
 Here's an example in NodeJS using Promises with async/await:
 
 ```js
-let Parser = require('rss-to-json-parser');
-let parser = new Parser();
+const rssParser = new Parser();
+const feed = await rssParser.parseString(`
+  <?xml version="1.0" encoding="UTF-8"?>
+  <rss xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+    <channel>
+      <title>Instant Article Test</title>
+      <link>https://example.com</link>
+      <description>1, 2, 1, 2… check the mic!</description>
+      <item>
+        <title>My first Instant Article</title>
+        <link>https://example.com/my-first-article</link>
+        <description>Lorem ipsum</description>
+        <content:encoded>&lt;b&gt;Lorem&lt;/b&gt; ipsum</content:encoded>
+        <guid>eb4a43a9-0e30-446a-b92e-de65966d5a1a</guid>
+        <dc:creator>johannes</dc:creator>
+        <dc:date>2016-05-04T06:53:45Z</dc:date>
+      </item>
+    </channel>
+  </rss>
+`);
 
-(async () => {
+console.log(feed.title); // Instant Article Test
 
-  let feed = await parser.parseURL('https://www.reddit.com/.rss');
-  console.log(feed.title);
-
-  feed.items.forEach(item => {
-    console.log(item.title + ':' + item.link)
-  });
-
-})();
+feed.items.forEach(item => {
+  // My first Instant Article: https://example.com/my-first-article
+  console.log(`${item.title}: ${item.link}`);
+});
 ```
-
-### Web
-> We recommend using a bundler like [webpack](https://webpack.js.org/), but we also provide
-> pre-built browser distributions in the `dist/` folder. If you use the pre-built distribution,
-> you'll need a [polyfill](https://github.com/taylorhakes/promise-polyfill) for Promise support.
-
-Here's an example in the browser using callbacks:
-
-```html
-<script src="/node_modules/rss-to-json-parser/dist/rss-to-json-parser.min.js"></script>
-<script>
-
-// Note: some RSS feeds can't be loaded in the browser due to CORS security.
-// To get around this, you can use a proxy.
-const CORS_PROXY = "https://cors-anywhere.herokuapp.com/"
-
-let parser = new RSSParser();
-parser.parseURL(CORS_PROXY + 'https://www.reddit.com/.rss', function(err, feed) {
-  if (err) throw err;
-  console.log(feed.title);
-  feed.items.forEach(function(entry) {
-    console.log(entry.title + ':' + entry.link);
-  })
-})
-
-</script>
-```
-
-### Upgrading from v2 to v3
-A few minor breaking changes were made in v3. Here's what you need to know:
-
-* You need to construct a `new Parser()` before calling `parseString` or `parseURL`
-* `parseFile` is no longer available (for better browser support)
-* `options` are now passed to the Parser constructor
-* `parsed.feed` is now just `feed` (top-level object removed)
-* `feed.entries` is now `feed.items` (to better match RSS XML)
-
 
 ## Output
 Check out the full output format in [test/output/reddit.json](test/output/reddit.json)
@@ -115,26 +92,43 @@ items:
 If your RSS feed contains fields that aren't currently returned, you can access them using the `customFields` option.
 
 ```js
-let parser = new Parser({
+const rssParser = new Parser({
   customFields: {
-    feed: ['otherTitle', 'extendedDescription'],
-    item: ['coAuthor','subtitle'],
+    feed: ['thing'],
+    item: [
+      ['title', 'customName'],
+    ]
   }
 });
 
-parser.parseURL('https://www.reddit.com/.rss', function(err, feed) {
-  console.log(feed.extendedDescription);
+const feed = await rssParser.parseString(`
+  <?xml version="1.0" encoding="UTF-8"?>
+  <rss xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+    <channel>
+      <thing>Instant Article Test 2</thing>
+      <item>
+        <title>My second Instant Article</title>
+        <link>https://example.com/my-second-article</link>
+      </item>
+    </channel>
+  </rss>
+`);
 
-  feed.items.forEach(function(entry) {
-    console.log(entry.coAuthor + ':' + entry.subtitle);
-  })
-})
+console.log(feed.thing); // Instant Article Test 2
+
+feed.items.forEach(item => {
+  // My second Instant Article: https://example.com/my-second-article
+  // console.log(`${item.customName}: ${item.link}`); 
+  expect(`${item.customName}: ${item.link}`).to.equal(
+    'My second Instant Article: https://example.com/my-second-article'
+  );
+});
 ```
 
 To rename fields, you can pass in an array with two items, in the format `[fromField, toField]`:
 
 ```js
-let parser = new Parser({
+const parser = new Parser({
   customFields: {
     item: [
       ['dc:coAuthor', 'coAuthor'],
@@ -148,7 +142,7 @@ To pass additional flags, provide an object as the third array item. Currently t
 * `keepArray`: `true` to return *all* values for fields that can have multiple entries. Default: return the first item only.
 
 ```js
-let parser = new Parser({
+const parser = new Parser({
   customFields: {
     item: [
       ['media:content', 'media:content', {keepArray: true}],
@@ -161,55 +155,27 @@ let parser = new Parser({
 If your RSS Feed doesn't contain a `<rss>` tag with a `version` attribute,
 you can pass a `defaultRSS` option for the Parser to use:
 ```js
-let parser = new Parser({
+const parser = new Parser({
   defaultRSS: 2.0
 });
 ```
 
 
 ### xml2js passthrough
-`rss-to-json-parser` uses [xml2js](https://github.com/Leonidas-from-XIV/node-xml2js)
+`rss-to-js` uses [xml2js](https://github.com/Leonidas-from-XIV/node-xml2js)
 to parse XML. You can pass [these options](https://github.com/Leonidas-from-XIV/node-xml2js#options)
 to `new xml2js.Parser()` by specifying `options.xml2js`:
 
 ```js
-let parser = new Parser({
+const parser = new Parser({
   xml2js: {
     emptyTag: '--EMPTY--',
   }
 });
 ```
 
-## HTTP Options
-
-### Timeout
-You can set the amount of time (in milliseconds) to wait before the HTTP request times out (default 60 seconds):
-
-```js
-let parser = new Parser({
-  timeout: 1000,
-});
-```
-
-### Headers
-You can pass headers to the HTTP request:
-```js
-let parser = new Parser({
-  headers: {'User-Agent': 'something different'},
-});
-```
-
-### Redirects
-By default, `parseURL` will follow up to five redirects. You can change this
-with `options.maxRedirects`.
-
-```js
-let parser = new Parser({maxRedirects: 100});
-```
-
-
 ## Contributing
-Contributions are welcome! If you are adding a feature or fixing a bug, please be sure to add a [test case](https://github.com/johannessanders/rss-to-json-parser/tree/master/test/input)
+Contributions are welcome! If you are adding a feature or fixing a bug, please be sure to add a [test case](https://github.com/johannessanders/rss-to-js/tree/master/test/input)
 
 ### Running Tests
 The tests run the RSS parser for several sample RSS feeds in `test/input` and outputs the resulting JSON into `test/output`. If there are any changes to the output files the tests will fail.
