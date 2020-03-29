@@ -1,0 +1,46 @@
+{
+  "feed": {
+    "items": [
+      {
+        "title": "<a href=\"https://example.atlassian.net/secure/ViewProfile.jspa?accountId=5c050671a424561a8ea601a5&amp;streamsSourceProduct=jira\" class=\"activity-item-user activity-item-author\">John Doe</a> bijgewerkt2 velden van       <a href=\"https://example.atlassian.net/browse/EX-239?streamsSourceProduct=jira\">EX-239 - Database connections should be closed to avoid error message (to many DB connections)</a>\n  ",
+        "link": "https://example.atlassian.net/browse/EX-239?streamsSourceProduct=jira",
+        "pubDate": "2020-03-04T09:15:19.785Z",
+        "author": "John Doe",
+        "content": "<ul class=\"updates activity-list\">   <li>Wijzigde de Resterende Schatting in '0u'   <li>Logde '20m' </ul> ",
+        "contentSnippet": "Wijzigde de Resterende Schatting in '0u'   Logde '20m'",
+        "id": "urn:uuid:fc41as6b-1fa9-3869-82eb-27633218a9a6",
+        "isoDate": "2020-03-04T09:15:19.785Z"
+      },
+      {
+        "title": "<a href=\"https://example.atlassian.net/secure/ViewProfile.jspa?accountId=5c050671a424561a8ea601a5&amp;streamsSourceProduct=jira\" class=\"activity-item-user activity-item-author\">John Doe</a> wijzigde de Uitvoerder in '<span class=\"activity-item-user\">Anonieme gebruiker</span>' op       <a href=\"https://example.atlassian.net/browse/EX-239?streamsSourceProduct=jira\">EX-239 - Database connections should be closed to avoid error message (to many DB connections)</a>\n  ",
+        "link": "https://example.atlassian.net/browse/EX-239?streamsSourceProduct=jira",
+        "pubDate": "2020-03-04T09:15:07.600Z",
+        "author": "John Doe",
+        "id": "urn:uuid:c5c723b4-6cb7-3d62-8ac7-cc9898f2525f",
+        "isoDate": "2020-03-04T09:15:07.600Z"
+      },
+      {
+        "title": "<a href=\"https://example.atlassian.net/secure/ViewProfile.jspa?accountId=557058:3671c760-5f25-4947-a2ba-0ebcfc00744b&amp;streamsSourceProduct=jira\" class=\"activity-item-user activity-item-author\">Jane Smith</a> bijgewerkt2 velden van       <a href=\"https://example.atlassian.net/browse/EX-12?streamsSourceProduct=jira\">EX-12 - EX-0 DevOps</a>\n  ",
+        "link": "https://example.atlassian.net/browse/EX-12?streamsSourceProduct=jira",
+        "pubDate": "2020-03-03T22:00:50.101Z",
+        "author": "Jane Smith",
+        "content": "<ul class=\"updates activity-list\">   <li>Wijzigde de Resterende Schatting in '0u'   <li>Logde '0,5u' </ul> ",
+        "contentSnippet": "Wijzigde de Resterende Schatting in '0u'   Logde '0,5u'",
+        "id": "urn:uuid:ad30dbba-7f6f-3960-9215-20ac7cdaee26",
+        "isoDate": "2020-03-03T22:00:50.101Z"
+      },
+      {
+        "title": "<a href=\"https://example.atlassian.net/secure/ViewProfile.jspa?accountId=557058:3671c760-5f25-4947-a2ba-0ebcfc00744b&amp;streamsSourceProduct=jira\" class=\"activity-item-user activity-item-author\">Jane Smith</a> wijzigde de Uitvoerder in '<span class=\"activity-item-user\">Anonieme gebruiker</span>' op       <a href=\"https://example.atlassian.net/browse/EX-129?streamsSourceProduct=jira\">EX-129 - AutoFill jira username in Worklogs search field</a>\n  ",
+        "link": "https://example.atlassian.net/browse/EX-124?streamsSourceProduct=jira",
+        "pubDate": "2020-03-03T20:11:57.608Z",
+        "author": "Jane Smith",
+        "id": "urn:uuid:9e44ebf8-0afa-397e-baaa-c47bea148e90",
+        "isoDate": "2020-03-03T20:11:57.608Z"
+      }
+    ],
+    "link": "https://example.atlassian.net/activity?os_authType=basic",
+    "feedUrl": "https://example.atlassian.net/activity?os_authType=basic",
+    "title": "Activiteitenoverzichten",
+    "lastBuildDate": "2020-03-04T09:48:39.320Z"
+  }
+}

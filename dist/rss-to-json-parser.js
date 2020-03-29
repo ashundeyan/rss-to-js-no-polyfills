@@ -159,7 +159,7 @@ var fields = __webpack_require__(/*! ./fields */ "./lib/fields.js");
 var utils = __webpack_require__(/*! ./utils */ "./lib/utils.js");
 
 var DEFAULT_HEADERS = {
-  'User-Agent': 'rss-to-json-parser',
+  'User-Agent': 'rss-to-js',
   'Accept': 'application/rss+xml'
 };
 var DEFAULT_MAX_REDIRECTS = 5;
@@ -11757,4 +11757,4 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_xmlbuilder__;
 
 /******/ });
 });
-//# sourceMappingURL=rss-to-json-parser.js.map
+//# sourceMappingURL=rss-to-js.js.map
