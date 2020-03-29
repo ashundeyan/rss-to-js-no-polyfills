@@ -1,6 +1,6 @@
 <h1 align="center">
   <img src="logo.svg" width="100" alt="icon" draggable="false"><br>
-  RSS to JSON parser
+  RSS to JS parser
   <br>
   <br>
 </h1>

@@ -71,7 +71,7 @@ declare namespace Parser {
 }
 
 /**
- * Class that handles all parsing or URL, or even XML, RSS feed to JSON.
+ * Class that handles all parsing or URL, or even XML, RSS feed to JS.
  */
 declare class Parser {
   /**
@@ -79,7 +79,7 @@ declare class Parser {
    */
   constructor(options?: Parser.ParserOptions);
   /**
-   * Parse XML content to JSON.
+   * Parse XML content to JS.
    *
    * @param xml - The xml to be parsed.
    * @param callback - Traditional callback.
@@ -92,9 +92,9 @@ declare class Parser {
   ): Promise<Parser.Output>;
 
   /**
-   * Parse URL content to JSON.
+   * Parse URL content to JS.
    *
-   * @param feedUrl - The url that needs to be parsed to JSON.
+   * @param feedUrl - The url that needs to be parsed to JS.
    * @param callback - Traditional callback.
    * @param redirectCount - Max of redirects, default is set to five.
    *
