@@ -5,21 +5,18 @@
         "creator": "johannes",
         "date": "2016-05-04T06:53:45Z",
         "title": "My first Instant Article",
-        "link": "https://example.com",
-        "pubDate": "Wed, 04 May 2016 06:53:45 GMT",
+        "link": "https://example.com/my-first-article",
         "content:encoded": "<b>Lorem</b> ipsum",
         "dc:creator": "johannes",
         "dc:date": "2016-05-04T06:53:45Z",
         "content": "Lorem ipsum",
         "contentSnippet": "Lorem ipsum",
-        "guid": "https://example.com",
+        "guid": "eb4a43a9-0e30-446a-b92e-de65966d5a1a",
         "isoDate": "2016-05-04T06:53:45.000Z"
       }
     ],
     "title": "Instant Article Test",
     "description": "1, 2, 1, 2… check the mic!",
-    "pubDate": "Fri, 13 May 2016 15:14:05 GMT",
-    "link": "https://example.com",
-    "language": "en"
+    "link": "https://example.com"
   }
 }

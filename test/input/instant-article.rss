@@ -4,17 +4,12 @@
     <title>Instant Article Test</title>
     <link>https://example.com</link>
     <description>1, 2, 1, 2… check the mic!</description>
-    <language>en</language>
-    <pubDate>Fri, 13 May 2016 15:14:05 GMT</pubDate>
-    <dc:date>2016-05-13T15:14:05Z</dc:date>
-    <dc:language>en</dc:language>
     <item>
       <title>My first Instant Article</title>
-      <link>https://example.com</link>
+      <link>https://example.com/my-first-article</link>
       <description>Lorem ipsum</description>
       <content:encoded>&lt;b&gt;Lorem&lt;/b&gt; ipsum</content:encoded>
-      <pubDate>Wed, 04 May 2016 06:53:45 GMT</pubDate>
-      <guid>https://example.com</guid>
+      <guid>eb4a43a9-0e30-446a-b92e-de65966d5a1a</guid>
       <dc:creator>johannes</dc:creator>
       <dc:date>2016-05-04T06:53:45Z</dc:date>
     </item>

@@ -59,6 +59,7 @@ feed.items.forEach(item => {
 ```
 
 ## Output
+
 Check out the full output format in [test/output/reddit.json](test/output/reddit.json)
 
 ```yaml
