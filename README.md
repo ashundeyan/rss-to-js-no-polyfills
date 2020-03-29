@@ -197,3 +197,7 @@ npm version minor # or major/patch
 npm publish
 git push --follow-tags
 ```
+
+## Author(s)
+
+- [Johannes Sanders](https://johannes.space) developer @[Blip](https://blip.agency)
