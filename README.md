@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="logo.svg" width="100" alt="icon" draggable="false"><br>
+  <img src="logo.svg?sanitize=true" width="100" alt="icon" draggable="false" style="max-width:100%;"><br>
   RSS to JS parser
   <br>
   <br>
