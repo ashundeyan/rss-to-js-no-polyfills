@@ -37,7 +37,7 @@
   ],
   "license": "MIT",
   "main": "index.js",
-  "name": "rss-to-js",
+  "name": "rss-to-js-no-fills",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/johannessanders/rss-to-js.git"
